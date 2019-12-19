@@ -622,6 +622,11 @@ def grab(sql_input, multi_epoch = True, make_corr = True,
         non_nan_data = np.where(nan_bool_flux == False)
         nan_data = np.where(nan_bool_flux == True)
         nan_data = nan_data
+        for attr in dir(SN):
+            if attr.startswith("__") is not True and isinstance(getattr(SN,attr), np.ndarray) is True:
+                new_attr = getattr(SN,attr)
+                new_attr.setflags(write=1)
+                setattr(SN, attr, new_attr)
         SN.flux[nan_data]         = np.nan
         SN.ivar[nan_data]         = 0.
         SN.phase_array[nan_data]  = np.nan
